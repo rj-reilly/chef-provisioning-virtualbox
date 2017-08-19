@@ -1,8 +1,5 @@
 pipeline {
     agent any
-     environment {
-        VERSION = '0.0.0'
-    }
     stages {
     stage('ship') {
       steps {
