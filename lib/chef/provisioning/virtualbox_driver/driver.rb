@@ -22,13 +22,13 @@ module VirtualboxDriver
   end
 
 
-  def virtualbox.create_server(name, machine_options)
+  def Virtualbox.create_server(name, machine_options)
       machine_spec.reference['server_id'] = %x(/usr/local/bin/createvm-q.sh "#{name}" 10)
   end
 
   def allocate_machine(action_handler, machine_spec, machine_options)
     if machine_spec.reference
-      if !virtualbox.server_exists?(machine_spec.reference['server_id'])
+      if !Virtualbox.server_exists?(machine_spec.reference['server_id'])
         action_handler.perform_action "Machine #{machine_spec.reference['server_id']} does not exist.  Recreating ..." do
           machine_spec.reference = nil
         end
@@ -37,7 +37,7 @@ module VirtualboxDriver
     if !machine_spec.reference
       action_handler.perform_action "Creating server #{machine_spec.name} with options #{machine_options}" do
         private_key = get_private_key('bootstrapkey')
-        server_id = virtualbox.create_server(machine_spec.name, machine_options, :bootstrap_ssh_key => private_key)
+        server_id = Virtualbox.create_server(machine_spec.name, machine_options, :bootstrap_ssh_key => private_key)
         machine_spec.reference = {
           'driver_url' => driver_url,
           'driver_version' => VirtualboxDriver::VERSION,
